@@ -2,10 +2,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FolderMain {
 
-    //need this comment for git
     /**
      * @param folder the original directory to read from
      * @return a numerically sorted array of files from a directory (ignores folders)
@@ -18,8 +19,12 @@ public class FolderMain {
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
                 try {
-                    order.add(Integer.parseInt(listOfFiles[i].getName().substring(0, listOfFiles[i].getName().indexOf("."))));
-                    initialOrder.add(Integer.parseInt(listOfFiles[i].getName().substring(0, listOfFiles[i].getName().indexOf("."))));
+                    Pattern p = Pattern.compile("\\d+");
+                    Matcher m = p.matcher(listOfFiles[i].getName());
+                    while(m.find()) {
+                        order.add(Integer.parseInt(m.group()));
+                        initialOrder.add(Integer.parseInt(m.group()));
+                    }
                 } catch (Exception e) {
 
                 }
@@ -52,8 +57,16 @@ public class FolderMain {
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isDirectory()) {
                 try {
-                    order.add(Integer.parseInt(listOfFiles[i].getName().substring(listOfFiles[i].getName().indexOf("Chapter") + 8)));
-                    initialOrder.add(Integer.parseInt(listOfFiles[i].getName().substring(listOfFiles[i].getName().indexOf("Chapter") + 8)));
+                    Pattern p = Pattern.compile("\\d+");
+                    Matcher m = p.matcher(listOfFiles[i].getName());
+                    while(m.find()) {
+//                        order.add(Integer.parseInt(listOfFiles[i].getName().substring(listOfFiles[i].getName().indexOf("Chapter") + 8)));
+//                        initialOrder.add(Integer.parseInt(listOfFiles[i].getName().substring(listOfFiles[i].getName().indexOf("Chapter") + 8)));
+                        order.add(Integer.parseInt(m.group()));
+                        initialOrder.add(Integer.parseInt(m.group()));
+                        //System.out.println(m.group());
+                    }
+
                 } catch (NumberFormatException e) {
                     System.out.println("Found a non-integer filename " + listOfFiles[i].getName());
                 }
