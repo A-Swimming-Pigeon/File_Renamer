@@ -5,6 +5,7 @@ import java.util.Scanner;
 class RenamingTool {
     private int start;
     private int lastChoice;
+    private int inc;
 
     /**
      * Represents a tool to rename all directories within a directory
@@ -12,7 +13,8 @@ class RenamingTool {
      * @param initialPath the initial directory
      * @param start the first number to rename a file to
      */
-    RenamingTool(File[] listOfFiles, String initialPath, int start){
+    RenamingTool(File[] listOfFiles, String initialPath, int start, int inc){
+        this.inc = inc;
         this.start = start;
 
         if (listOfFiles != null) {
@@ -48,7 +50,8 @@ class RenamingTool {
      * @param start the first number to rename a file to
      * @param choice a naming convention chosen prior to the constructor being called
      */
-    RenamingTool(File[] listOfFiles, String initialPath, int start, int choice){
+    RenamingTool(File[] listOfFiles, String initialPath, int start, int choice, int inc){
+        this.inc = inc;
         this.start = start;
 
         if (listOfFiles != null) {
@@ -121,7 +124,7 @@ class RenamingTool {
                 if (!success) {
                     System.out.println("Could not rename " + f.getName());
                 }
-                start += 1;
+                start += inc;
 
             }
         }
@@ -146,7 +149,7 @@ class RenamingTool {
                 if (!success) {
                     System.out.println("Could not rename " + f.getName());
                 }
-                start += 1;
+                start += inc;
 
             }
         }
@@ -171,7 +174,7 @@ class RenamingTool {
                 if (!success) {
                     System.out.println("Could not rename " + f.getName());
                 }
-                start += 1;
+                start += inc;
 
             }
         }

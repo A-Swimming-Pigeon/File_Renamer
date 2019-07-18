@@ -60,7 +60,9 @@ public class Main {
         System.out.println("Found " + fs + " files and " + ds + " directories in " + initialPath);
         System.out.print("Enter a starting number: ");
         int start = sc.nextInt();
-        RenamingTool r = new RenamingTool(listOfFiles, initialPath, start);
+        System.out.print("Enter increment amount: ");
+        int inc = sc.nextInt();
+        RenamingTool r = new RenamingTool(listOfFiles, initialPath, start, inc);
         int lastEnd = r.returnEnd();
         System.out.println(lastEnd);
         sc.close();

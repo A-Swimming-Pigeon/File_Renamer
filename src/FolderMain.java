@@ -117,7 +117,13 @@ public class FolderMain {
             System.out.println("Invalid start number, defaulting to 0");
             start = 0;
         }
-        renameLoop(initialPath, listOfFiles, outputDir, start);
+        System.out.print("Enter incrementation amount: ");
+        int inc = sc.nextInt();
+        if (inc < 1 || inc >= Integer.MAX_VALUE) {
+            System.out.println("Invalid incrementation, defaulting to 1");
+            inc = 1;
+        }
+        renameLoop(initialPath, listOfFiles, outputDir, start, inc);
         for(File f: listOfFiles) {
             if (f.isDirectory()) {
                 f.deleteOnExit();
@@ -138,7 +144,7 @@ public class FolderMain {
      * @param outputDir   the output directory chosen by the user
      * @param start       the starting number for renaming provided by the user
      */
-    private static void renameLoop(String initialPath, File[] listOfFiles, String outputDir, int start) {
+    private static void renameLoop(String initialPath, File[] listOfFiles, String outputDir, int start, int inc) {
         RenamingTool r;
         String subDirectory;
         int lastEnd = start;
@@ -149,16 +155,16 @@ public class FolderMain {
             File[] lof = sortFiles(temp); //sort the files within the subdirectory numerically
             if (i == 0) { //if on the first iteration, let the user choose which naming convention they want
                 if (!outputDir.equalsIgnoreCase("this")) {
-                    r = new RenamingTool(lof, outputDir, lastEnd, 0);//rename to a specific output directory
+                    r = new RenamingTool(lof, outputDir, lastEnd, 0, inc);//rename to a specific output directory
                 } else {
-                    r = new RenamingTool(lof, initialPath, lastEnd, 0);
+                    r = new RenamingTool(lof, initialPath, lastEnd, 0, inc);
                 }
                 nextChoice = r.returnChoice();
             } else {
                 if (!outputDir.equalsIgnoreCase("this")) {
-                    r = new RenamingTool(lof, outputDir, lastEnd, nextChoice);
+                    r = new RenamingTool(lof, outputDir, lastEnd, nextChoice, inc);
                 } else {
-                    r = new RenamingTool(lof, initialPath, lastEnd, nextChoice);
+                    r = new RenamingTool(lof, initialPath, lastEnd, nextChoice, inc);
                 }
             }
             lastEnd = r.returnEnd();
