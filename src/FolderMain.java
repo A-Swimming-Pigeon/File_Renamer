@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class FolderMain {
 
     /**
-     * @param folder the original directory to read from
+     * @param folder the original file to read from
      * @return a numerically sorted array of files from a directory (ignores folders)
      */
     private static File[] sortFiles(File folder) {
@@ -16,17 +16,19 @@ public class FolderMain {
         File[] listOfFiles = folder.listFiles();
         ArrayList<Integer> order = new ArrayList<>();
         ArrayList<Integer> initialOrder = new ArrayList<>();
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if (listOfFiles[i].isFile()) {
+        assert listOfFiles != null;
+        for (File listOfFile : listOfFiles) {
+            if (listOfFile.isFile()) {
                 try {
                     Pattern p = Pattern.compile("\\d+");
-                    Matcher m = p.matcher(listOfFiles[i].getName());
-                    while(m.find()) {
+                    Matcher m = p.matcher(listOfFile.getName());
+                    while (m.find()) {
+
                         order.add(Integer.parseInt(m.group()));
                         initialOrder.add(Integer.parseInt(m.group()));
                     }
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
             } else {
                 order.add(Integer.MAX_VALUE - folderOffset);
@@ -41,6 +43,7 @@ public class FolderMain {
         }
         File[] temp = folder.listFiles();
         for (int i = 0; i < order.size(); i++) {
+            assert temp != null;
             temp[i] = listOfFiles[order.get(i)];
         }
         return temp;
@@ -54,12 +57,13 @@ public class FolderMain {
         File[] listOfFiles = folder.listFiles();
         ArrayList<Integer> order = new ArrayList<>();
         ArrayList<Integer> initialOrder = new ArrayList<>();
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if (listOfFiles[i].isDirectory()) {
+        assert listOfFiles != null;
+        for (File listOfFile : listOfFiles) {
+            if (listOfFile.isDirectory()) {
                 try {
                     Pattern p = Pattern.compile("\\d+");
-                    Matcher m = p.matcher(listOfFiles[i].getName());
-                    while(m.find()) {
+                    Matcher m = p.matcher(listOfFile.getName());
+                    while (m.find()) {
 //                        order.add(Integer.parseInt(listOfFiles[i].getName().substring(listOfFiles[i].getName().indexOf("Chapter") + 8)));
 //                        initialOrder.add(Integer.parseInt(listOfFiles[i].getName().substring(listOfFiles[i].getName().indexOf("Chapter") + 8)));
                         order.add(Integer.parseInt(m.group()));
@@ -68,7 +72,7 @@ public class FolderMain {
                     }
 
                 } catch (NumberFormatException e) {
-                    System.out.println("Found a non-integer filename " + listOfFiles[i].getName());
+                    System.out.println("Found a non-integer filename " + listOfFile.getName());
                 }
             } else {
                 order.add(Integer.MAX_VALUE);
@@ -81,6 +85,7 @@ public class FolderMain {
         }
         File[] temp = folder.listFiles();
         for (int i = 0; i < order.size(); i++) {
+            assert temp != null;
             temp[i] = listOfFiles[order.get(i)];
         }
         return temp;

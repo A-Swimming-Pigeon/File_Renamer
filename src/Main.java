@@ -2,20 +2,34 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
 
-    //REQUIRES: File != null, folder contents are all numerically ordered
-    //EFFECTS: returns a folder's sorted files numerically (originally lexicographic) and ignores directories
+    /**
+     * @param folder the original file to read from
+     * @return a numerically sorted array of files from a directory (ignores folders)
+     */
     private static File[] sortFiles(File folder) {
         int folderOffset = 0;
         File[] listOfFiles = folder.listFiles();
         ArrayList<Integer> order = new ArrayList<>();
         ArrayList<Integer> initialOrder = new ArrayList<>();
-        for(int i = 0; i < listOfFiles.length; i++) {
-            if(listOfFiles[i].isFile()) {
-                order.add(Integer.parseInt(listOfFiles[i].getName().substring(0, listOfFiles[i].getName().indexOf("."))));
-                initialOrder.add(Integer.parseInt(listOfFiles[i].getName().substring(0, listOfFiles[i].getName().indexOf("."))));
+        assert listOfFiles != null;
+        for (File listOfFile : listOfFiles) {
+            if (listOfFile.isFile()) {
+                try {
+                    Pattern p = Pattern.compile("\\d+");
+                    Matcher m = p.matcher(listOfFile.getName());
+                    while (m.find()) {
+
+                        order.add(Integer.parseInt(m.group()));
+                        initialOrder.add(Integer.parseInt(m.group()));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
                 order.add(Integer.MAX_VALUE - folderOffset);
                 initialOrder.add(Integer.MAX_VALUE - folderOffset);
@@ -28,7 +42,8 @@ public class Main {
             order.set(i, initialOrder.indexOf(order.get(i)));
         }
         File[] temp = folder.listFiles();
-        for(int i = 0; i < temp.length; i++) {
+        for (int i = 0; i < order.size(); i++) {
+            assert temp != null;
             temp[i] = listOfFiles[order.get(i)];
         }
         return temp;
