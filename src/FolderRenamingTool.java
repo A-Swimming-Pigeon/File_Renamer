@@ -1,9 +1,11 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.concurrent.TimeUnit;
 
 public class FolderRenamingTool {
 
@@ -119,13 +121,13 @@ public class FolderRenamingTool {
         File folder = new File(initialPath);
         //PaddingTool pt = new PaddingTool(folder, initialPath);
         //Files.list(Paths.get(dirName)).sorted().forEach(System.out::println)
-        File[] listOfFiles = sortFolders(folder);
-        listFiles(initialPath, listOfFiles);
+        File[] listOfFolders = sortFolders(folder);
+        listFiles(initialPath, listOfFolders);
         System.out.print("Enter output directory: (Enter \"this\" for this directory): ");
         String outputDir = sc.nextLine();
         if (!outputDir.toLowerCase().contains("this")) {
             if (isInvalidDirectory(outputDir)) {
-                System.out.println("Invalid Output Directory, outputting to the current directory");
+                System.out.println("Invalid Output Directory, outputting to the current directory: " + initialPath);
                 outputDir = "this";
             }
         }
@@ -141,14 +143,20 @@ public class FolderRenamingTool {
             System.out.println("Invalid incrementation, defaulting to 1");
             inc = 1;
         }
-        renameLoop(initialPath, listOfFiles, outputDir, start, inc);
-        for(File f: listOfFiles) {
+        long startTime = System.nanoTime();
+        renameLoop(initialPath, listOfFolders, outputDir, start, inc);
+        for(File f: listOfFolders) {
             if (f.isDirectory()) {
                 f.deleteOnExit();
             }
         }
         sc.close();
-        System.out.println("Completed!");
+        long endTime = System.nanoTime();
+        long timeElapsed = endTime - startTime;
+        double seconds = (double)timeElapsed / 1_000_000_000.0;
+        Calendar c = Calendar.getInstance();
+        System.out.println("Completed in " + seconds + " seconds on " + c.get(Calendar.YEAR) + "/" + c.get(Calendar.MONTH) + "/"
+        + c.get(Calendar.DATE) + " " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND));
     }
 
 

@@ -125,7 +125,11 @@ class RenamingTool {
                 if (!success) {
                     System.out.println("Could not rename " + f.getName());
                 }
-                start += inc;
+                if (start + inc >= Integer.MAX_VALUE) {
+                    throw new RuntimeException("Integer overflow encountered when trying to increment file number");
+                } else {
+                    start += inc;
+                }
 
             }
         }
@@ -168,7 +172,11 @@ class RenamingTool {
                 if (!success) {
                     System.out.println("Could not rename " + f.getName());
                 }
-                start += inc;
+                if (start + inc >= Integer.MAX_VALUE) {
+                    throw new RuntimeException("Integer overflow encountered when trying to increment file number");
+                } else {
+                    start += inc;
+                }
 
             }
         }
@@ -193,7 +201,11 @@ class RenamingTool {
                 if (!success) {
                     System.out.println("Could not rename " + f.getName());
                 }
-                start += inc;
+                if (start + inc >= Integer.MAX_VALUE) {
+                    throw new RuntimeException("Integer overflow encountered when trying to increment file number");
+                } else {
+                    start += inc;
+                }
 
             }
         }
