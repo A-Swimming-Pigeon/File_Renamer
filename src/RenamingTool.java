@@ -108,7 +108,7 @@ class RenamingTool {
 
 
     /**
-     * Represents a method to rename a file by adding the number in front and preserving the original filename
+     * Represents a method to rename a list of files by adding a number in front and preserving the original filename
      * @param listOfFiles a sorted list of files to work with
      * @param initialPath the directory of the files
      * @throws IOException if a file already exists
@@ -119,7 +119,7 @@ class RenamingTool {
             if (f.isFile()) {
                 file2 = new File (initialPath + "/" + start + "_" + f.getName());
                 if (file2.exists()) {
-                    throw new java.io.IOException("file already exists");
+                    throw new java.io.IOException(f.getName() + " already exists");
                 }
                 boolean success = f.renameTo(file2);
                 if (!success) {
@@ -132,6 +132,24 @@ class RenamingTool {
     }
 
     /**
+     * Determines the filetype of a file. Requires there to be at least one period in the string.
+     * @param s the file name of a file
+     * @return the filetype of the file including the period.
+     */
+    private String determineFiletype(String s) {
+        if (s.contains(".")) {
+            while (s.contains(".")) {
+                if (s.contains(".") && !s.substring(s.indexOf(".") + 1).contains(".")) {
+                    return s.substring(s.indexOf("."));
+                } else {
+                    s = s.substring(s.indexOf(".") + 1);
+                }
+            }
+        }
+        return "";
+    }
+
+    /**
      * Represents a method to rename a file by replacing the filename with the number
      * @param listOfFiles a sorted list of files to work with
      * @param initialPath the directory of the files
@@ -141,10 +159,10 @@ class RenamingTool {
         File file2;
         for (File f : listOfFiles) {
             if (f.isFile()) {
-                String filetype = f.getName().substring(f.getName().length() - 4);
+                String filetype = determineFiletype(f.getName());
                 file2 = new File (initialPath + "/" + start + filetype);
                 if (file2.exists()) {
-                    throw new java.io.IOException("file already exists");
+                    throw new java.io.IOException(f.getName() + " already exists");
                 }
                 boolean success = f.renameTo(file2);
                 if (!success) {
@@ -166,10 +184,10 @@ class RenamingTool {
         File file2;
         for (File f : listOfFiles) {
             if (f.isFile()) {
-                String filetype = f.getName().substring(f.getName().length() - 4);
+                String filetype = determineFiletype(f.getName());
                 file2 = new File(initialPath + "/" + f.getName().substring(0, f.getName().length() - 4) + "_" + start + filetype);
                 if (file2.exists()) {
-                    throw new java.io.IOException("file already exists");
+                    throw new java.io.IOException(f.getName() + " already exists");
                 }
                 boolean success = f.renameTo(file2);
                 if (!success) {
