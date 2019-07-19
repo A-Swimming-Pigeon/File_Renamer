@@ -5,7 +5,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FolderMain {
+public class FolderRenamingTool {
 
     /**
      * @param folder the original file to read from
@@ -36,8 +36,6 @@ public class FolderMain {
             }
         }
         Collections.sort(order);
-        //System.out.println("Sorted order " + order);
-        //System.out.println("Initial order" + initialOrder);
         for (int i = 0; i < order.size(); i++) {
             order.set(i, initialOrder.indexOf(order.get(i)));
         }
@@ -58,21 +56,20 @@ public class FolderMain {
         ArrayList<Integer> order = new ArrayList<>();
         ArrayList<Integer> initialOrder = new ArrayList<>();
         assert listOfFiles != null;
-        for (File listOfFile : listOfFiles) {
-            if (listOfFile.isDirectory()) {
+        for (File f : listOfFiles) {
+            if (f.isDirectory()) {
                 try {
                     Pattern p = Pattern.compile("\\d+");
-                    Matcher m = p.matcher(listOfFile.getName());
+                    Matcher m = p.matcher(f.getName());
                     while (m.find()) {
 //                        order.add(Integer.parseInt(listOfFiles[i].getName().substring(listOfFiles[i].getName().indexOf("Chapter") + 8)));
 //                        initialOrder.add(Integer.parseInt(listOfFiles[i].getName().substring(listOfFiles[i].getName().indexOf("Chapter") + 8)));
                         order.add(Integer.parseInt(m.group()));
                         initialOrder.add(Integer.parseInt(m.group()));
-                        //System.out.println(m.group());
                     }
 
                 } catch (NumberFormatException e) {
-                    System.out.println("Found a non-integer filename " + listOfFile.getName());
+                    System.out.println("Found a non-integer filename " + f.getName());
                 }
             } else {
                 order.add(Integer.MAX_VALUE);
@@ -94,13 +91,17 @@ public class FolderMain {
     /**
      * Checks if a given directory is invalid.
      * @param path the path of a directory to check
-     * @return true if a path does not exist, false otherwise
+     * @return true if a directory does not exist, false otherwise
      */
     private static boolean isInvalidDirectory(String path){
         File temp = new File(path);
         return !temp.exists();
     }
 
+    /**
+     * Represents a tool to rename all files found within folders within a specified directory by numerical order.
+     * @param args well, it's psvm. What'd you expect?
+     */
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter a directory: ");
@@ -115,12 +116,11 @@ public class FolderMain {
                 initialPath = sc.nextLine();
             }
         }
-        // File (or directory) with old name
         File folder = new File(initialPath);
         //PaddingTool pt = new PaddingTool(folder, initialPath);
         //Files.list(Paths.get(dirName)).sorted().forEach(System.out::println)
         File[] listOfFiles = sortFolders(folder);
-        displayFoundFolders(initialPath, listOfFiles);
+        listFiles(initialPath, listOfFiles);
         System.out.print("Enter output directory: (Enter \"this\" for this directory): ");
         String outputDir = sc.nextLine();
         if (!outputDir.toLowerCase().contains("this")) {
@@ -161,6 +161,7 @@ public class FolderMain {
      * @param listOfFiles all extracted files and folders from a directory
      * @param outputDir   the output directory chosen by the user
      * @param start       the starting number for renaming provided by the user
+     * @param inc         the amount to increment by per iteration
      */
     private static void renameLoop(String initialPath, File[] listOfFiles, String outputDir, int start, int inc) {
         RenamingTool r;
@@ -194,7 +195,7 @@ public class FolderMain {
      * @param initialPath the path of the directory being displayed
      * @param listOfFiles the list of files from the file constructed from the directory
      */
-    private static void displayFoundFolders(String initialPath, File[] listOfFiles) {
+    private static void listFiles(String initialPath, File[] listOfFiles) {
         int fs = 0;
         int ds = 0;
         for (File f : listOfFiles) {

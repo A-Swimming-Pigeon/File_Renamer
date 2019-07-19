@@ -5,7 +5,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Main {
+public class FileRenamingTool {
 
     /**
      * @param folder the original file to read from
@@ -49,6 +49,10 @@ public class Main {
         return temp;
     }
 
+    /**
+     * Represents a tool used to rename large quantities of files sequentially in a folder.
+     * @param args well, it's psvm. What'd you expect.
+     */
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
@@ -61,18 +65,7 @@ public class Main {
         //PaddingTool pt = new PaddingTool(folder, initialPath);
         //Files.list(Paths.get(dirName)).sorted().forEach(System.out::println);
         File[] listOfFiles = sortFiles(folder);
-        int fs = 0;
-        int ds = 0;
-        for (File f : listOfFiles) {
-            if (f.isFile()) {
-                System.out.println("File " + f.getName());
-                fs += 1;
-            } else if (f.isDirectory()) {
-                System.out.println("Directory " + f.getName());
-                ds += 1;
-            }
-        }
-        System.out.println("Found " + fs + " files and " + ds + " directories in " + initialPath);
+        listFiles(initialPath, listOfFiles);
         System.out.print("Enter a starting number: ");
         int start = sc.nextInt();
         System.out.print("Enter increment amount: ");
@@ -93,5 +86,25 @@ public class Main {
 //        }
         //File file = new File("D:/Tutoring Materials/test.txt");
 
+    }
+
+    /**
+     * Displays all files and folders in a directory. Assumes listOfFiles to be presorted.
+     * @param initialPath the path of the directory being displayed
+     * @param listOfFiles the list of files from the file constructed from the directory
+     */
+    private static void listFiles(String initialPath, File[] listOfFiles) {
+        int fs = 0;
+        int ds = 0;
+        for (File f : listOfFiles) {
+            if (f.isFile()) {
+                System.out.println("File " + f.getName());
+                fs += 1;
+            } else if (f.isDirectory()) {
+                System.out.println("Directory " + f.getName());
+                ds += 1;
+            }
+        }
+        System.out.println("Found " + fs + " files and " + ds + " directories in " + initialPath);
     }
 }

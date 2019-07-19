@@ -12,6 +12,7 @@ class RenamingTool {
      * @param listOfFiles the sorted list of files within a directory
      * @param initialPath the initial directory
      * @param start the first number to rename a file to
+     * @param inc the incrementation amount per iteration
      */
     RenamingTool(File[] listOfFiles, String initialPath, int start, int inc){
         this.inc = inc;
