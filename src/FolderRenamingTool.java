@@ -153,7 +153,7 @@ public class FolderRenamingTool {
         sc.close();
         long endTime = System.nanoTime();
         long timeElapsed = endTime - startTime;
-        double seconds = (double)timeElapsed / 1_000_000_000.0;
+        double seconds = (double)timeElapsed / Math.pow(10,9);
         Calendar c = Calendar.getInstance();
         System.out.println("Completed in " + seconds + " seconds on " + c.get(Calendar.YEAR) + "/" + c.get(Calendar.MONTH) + "/"
         + c.get(Calendar.DATE) + " " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND));
@@ -208,11 +208,13 @@ public class FolderRenamingTool {
         int ds = 0;
         for (File f : listOfFiles) {
             if (f.isFile()) {
-                System.out.println("File " + f.getName());
+                System.out.println("File: " + f.getName());
                 fs += 1;
             } else if (f.isDirectory()) {
-                System.out.println("Directory " + f.getName());
+                System.out.println("Directory: " + f.getName());
                 ds += 1;
+            } else {
+                System.out.println("???: " + f.getName());
             }
         }
         if (ds == 0 && fs == 0) {
